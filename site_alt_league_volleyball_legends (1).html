@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alt League | Volleyball Legends Roblox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      color: white;
+      overflow-x: hidden;
+      background: #050816;
+    }
+
+    .animated-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background: linear-gradient(120deg, #06091f, #16003f, #071f4f, #351270, #050816);
+      background-size: 400% 400%;
+      animation: bgMove 12s ease-in-out infinite;
+    }
+
+    .animated-bg::before,
+    .animated-bg::after {
+      content: "";
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: .65;
+      animation: orbFloat 9s ease-in-out infinite alternate;
+    }
+
+    .animated-bg::before {
+      top: -140px;
+      left: -120px;
+      background: #7b2fff;
+    }
+
+    .animated-bg::after {
+      right: -140px;
+      bottom: -160px;
+      background: #005dff;
+      animation-delay: -3s;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, black, transparent 90%);
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 20% 10%, rgba(167, 84, 255, .3), transparent 28%),
+                  radial-gradient(circle at 80% 30%, rgba(34, 107, 255, .25), transparent 24%),
+                  radial-gradient(circle at 45% 85%, rgba(123, 47, 255, .22), transparent 26%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: .12;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+    }
+
+    header {
+      width: 100%;
+      padding: 22px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(5, 8, 22, 0.62);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      cursor: default;
+    }
+
+    .logo span {
+      color: #8d70ff;
+      text-shadow: 0 0 18px rgba(141, 112, 255, .8);
+    }
+
+    nav {
+      display: flex;
+      gap: 24px;
+    }
+
+    nav a {
+      position: relative;
+      color: #dbe7ff;
+      text-decoration: none;
+      font-size: .95rem;
+      transition: .25s;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -7px;
+      width: 0;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #8c5cff, #2474ff);
+      transition: .25s;
+    }
+
+    nav a:hover {
+      color: #ffffff;
+      text-shadow: 0 0 15px rgba(120, 166, 255, .9);
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .hero {
+      padding: 95px 8% 70px;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 999px;
+      color: #d7e2ff;
+      background: rgba(255,255,255,.08);
+      margin-bottom: 22px;
+      animation: float 3s ease-in-out infinite;
+      box-shadow: 0 0 24px rgba(123, 47, 255, .22);
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 6vw, 5.8rem);
+      line-height: .96;
+      letter-spacing: -4px;
+      margin-bottom: 24px;
+      animation: fadeUp .75s ease both;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #78a6ff, #8c5cff, #d069ff, #246eff);
+      background-size: 240% 240%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: textGlow 5s ease-in-out infinite;
+    }
+
+    .hero p {
+      color: #c7d4ef;
+      max-width: 620px;
+      font-size: 1.12rem;
+      line-height: 1.7;
+      margin-bottom: 30px;
+      animation: fadeUp .9s ease both;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      animation: fadeUp 1.05s ease both;
+    }
+
+    .btn {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px 22px;
+      border-radius: 15px;
+      text-decoration: none;
+      font-weight: 900;
+      transition: .28s;
+      border: 1px solid rgba(255,255,255,.14);
+      isolation: isolate;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 70%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.42), transparent);
+      transform: skewX(-20deg);
+      transition: .55s;
+      z-index: -1;
+    }
+
+    .btn:hover::before {
+      left: 140%;
+    }
+
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, #226bff, #7b2fff, #351270);
+      background-size: 220% 220%;
+      box-shadow: 0 18px 45px rgba(84, 92, 255, .38);
+      animation: buttonPulse 3.4s ease-in-out infinite;
+    }
+
+    .btn-secondary {
+      color: #dbe7ff;
+      background: rgba(255,255,255,.08);
+    }
+
+    .btn:hover {
+      transform: translateY(-5px) scale(1.035);
+      box-shadow: 0 22px 55px rgba(97, 80, 255, .42);
+    }
+
+    .hero-card {
+      position: relative;
+      padding: 26px;
+      border-radius: 30px;
+      background: linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
+      border: 1px solid rgba(255,255,255,.15);
+      box-shadow: 0 25px 90px rgba(0,0,0,.34);
+      animation: cardEnter .9s ease both, cardFloat 5s ease-in-out infinite;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      background: conic-gradient(from 180deg, transparent, rgba(124, 92, 255, .7), rgba(34, 107, 255, .55), transparent);
+      opacity: .55;
+      animation: spin 7s linear infinite;
+      z-index: -1;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      border-radius: 29px;
+      background: rgba(8, 11, 32, .84);
+      z-index: -1;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-10px) rotateX(2deg) rotateY(-2deg);
+    }
+
+    .price-box {
+      border-radius: 24px;
+      padding: 28px;
+      background: linear-gradient(160deg, rgba(34,107,255,.4), rgba(123,47,255,.35));
+      margin-bottom: 18px;
+      transition: .28s;
+    }
+
+    .price-box:hover {
+      transform: scale(1.02);
+      box-shadow: inset 0 0 30px rgba(255,255,255,.08), 0 0 35px rgba(123,47,255,.25);
+    }
+
+    .price-box small {
+      color: #bfd3ff;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .price {
+      font-size: 4rem;
+      font-weight: 900;
+      margin-top: 8px;
+      text-shadow: 0 0 24px rgba(255,255,255,.22);
+    }
+
+    .slots {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .slot {
+      padding: 20px;
+      border-radius: 20px;
+      background: rgba(5,8,22,.58);
+      border: 1px solid rgba(255,255,255,.1);
+      transition: .28s;
+      cursor: default;
+    }
+
+    .slot:hover {
+      transform: translateY(-6px) scale(1.03);
+      border-color: rgba(142, 112, 255, .75);
+      background: rgba(58, 31, 115, .35);
+      box-shadow: 0 15px 35px rgba(0,0,0,.25);
+    }
+
+    .slot strong {
+      display: block;
+      font-size: 1.8rem;
+    }
+
+    .slot span {
+      color: #b7c6e8;
+      font-size: .9rem;
+    }
+
+    section {
+      padding: 70px 8%;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 42px;
+    }
+
+    .section-title h2 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      letter-spacing: -2px;
+      margin-bottom: 12px;
+    }
+
+    .section-title p {
+      color: #b7c6e8;
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .benefits {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .card {
+      position: relative;
+      padding: 28px;
+      border-radius: 26px;
+      background: rgba(255,255,255,.075);
+      border: 1px solid rgba(255,255,255,.11);
+      transition: .28s;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(141,112,255,.35), transparent 34%);
+      opacity: 0;
+      transition: .28s;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.02);
+      background: rgba(255,255,255,.105);
+      border-color: rgba(141,112,255,.55);
+      box-shadow: 0 22px 60px rgba(0,0,0,.32);
+    }
+
+    .icon {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #226bff, #7b2fff);
+      margin-bottom: 18px;
+      font-size: 1.5rem;
+      transition: .28s;
+      z-index: 1;
+    }
+
+    .card:hover .icon {
+      transform: rotate(-8deg) scale(1.12);
+      box-shadow: 0 0 28px rgba(123,47,255,.55);
+    }
+
+    .card h3,
+    .card p {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card h3 {
+      margin-bottom: 12px;
+      font-size: 1.25rem;
+    }
+
+    .card p {
+      color: #c3d0ea;
+      line-height: 1.6;
+    }
+
+    .ranking-box {
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.13);
+      background: rgba(255,255,255,.075);
+      box-shadow: 0 25px 70px rgba(0,0,0,.25);
+    }
+
+    .rank-row {
+      display: grid;
+      grid-template-columns: 80px 1fr 120px 110px;
+      gap: 16px;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      transition: .24s;
+    }
+
+    .rank-row:not(.header):hover {
+      transform: scale(1.015);
+      background: linear-gradient(90deg, rgba(123,47,255,.22), rgba(34,107,255,.12));
+      box-shadow: inset 4px 0 0 #8c5cff;
+    }
+
+    .rank-row:last-child {
+      border-bottom: 0;
+    }
+
+    .rank-row.header {
+      color: #aebfe2;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: .8rem;
+      letter-spacing: 1px;
+      background: rgba(0,0,0,.22);
+    }
+
+    .pos {
+      font-weight: 900;
+      color: #8fb7ff;
+      text-shadow: 0 0 14px rgba(143,183,255,.45);
+    }
+
+    .team {
+      font-weight: 900;
+    }
+
+    .cta {
+      text-align: center;
+      padding: 70px 8% 90px;
+    }
+
+    .cta-box {
+      position: relative;
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 48px;
+      border-radius: 34px;
+      background: linear-gradient(135deg, rgba(34,107,255,.3), rgba(132,56,255,.32));
+      border: 1px solid rgba(255,255,255,.15);
+      box-shadow: 0 25px 80px rgba(0,0,0,.28);
+      overflow: hidden;
+    }
+
+    .cta-box::before {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.14);
+      top: -90px;
+      right: -70px;
+      filter: blur(8px);
+    }
+
+    .cta h2 {
+      position: relative;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      margin-bottom: 16px;
+      letter-spacing: -2px;
+    }
+
+    .cta p {
+      position: relative;
+      color: #c7d4ef;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    footer {
+      padding: 28px 8%;
+      text-align: center;
+      color: #8999bd;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+
+    @keyframes bgMove {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    @keyframes orbFloat {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(80px, 60px) scale(1.14); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes cardEnter {
+      from { opacity: 0; transform: translateY(34px) scale(.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes cardFloat {
+      0%, 100% { translate: 0 0; }
+      50% { translate: 0 -12px; }
+    }
+
+    @keyframes textGlow {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    @keyframes buttonPulse {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 850px) {
+      nav {
+        display: none;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 60px;
+      }
+
+      .benefits {
+        grid-template-columns: 1fr;
+      }
+
+      .rank-row {
+        grid-template-columns: 55px 1fr 70px;
+      }
+
+      .rank-row span:nth-child(4) {
+        display: none;
+      }
+
+      h1 {
+        letter-spacing: -2px;
+      }
+
+      .cta-box {
+        padding: 34px 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="animated-bg"></div>
+  <div class="noise"></div>
+
+  <header>
+    <div class="logo">Alt <span>League</span></div>
+    <nav>
+      <a href="#beneficios">Benefícios</a>
+      <a href="#ranking">Ranking</a>
+      <a href="#inscricao">Inscrição</a>
+      <a href="https://discord.gg/altshop" target="_blank">Discord</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="badge">🏐 Liga competitiva de Volleyball Legends</div>
+        <h1>A liga feita para <span class="gradient-text">duplas evoluírem</span> no Roblox.</h1>
+        <p>
+          A Alt League é uma competição de Volleyball Legends focada em dar visibilidade,
+          experiência e evolução para cada dupla participante. Entre, jogue contra players
+          fortes, suba no ranking e prove que sua dupla merece estar no topo.
+        </p>
+        <div class="buttons">
+          <a class="btn btn-primary" href="https://discord.gg/altshop" target="_blank">Entrar no Discord</a>
+          <a class="btn btn-secondary" href="#ranking">Ver Ranking</a>
+        </div>
+      </div>
+
+      <div class="hero-card" id="inscricao">
+        <div class="price-box">
+          <small>Inscrição da liga</small>
+          <div class="price">R$5</div>
+          <p>Preço acessível para competir, ganhar destaque e participar da comunidade.</p>
+        </div>
+        <div class="slots">
+          <div class="slot">
+            <strong>50</strong>
+            <span>vagas disponíveis</span>
+          </div>
+          <div class="slot">
+            <strong>2v2</strong>
+            <span>formato em dupla</span>
+          </div>
+          <div class="slot">
+            <strong>Rank</strong>
+            <span>pontuação oficial</span>
+          </div>
+          <div class="slot">
+            <strong>Pro</strong>
+            <span>ambiente competitivo</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="beneficios">
+      <div class="section-title">
+        <h2>Por que jogar a Alt League?</h2>
+        <p>
+          A liga não é só sobre vencer. É sobre melhorar sua dupla, criar nome na comunidade
+          e jogar partidas organizadas com mais emoção.
+        </p>
+      </div>
+
+      <div class="benefits">
+        <div class="card">
+          <div class="icon">📈</div>
+          <h3>Evolução real da dupla</h3>
+          <p>Você enfrenta jogadores diferentes, aprende novas estratégias e melhora comunicação, defesa, ataque e posicionamento.</p>
+        </div>
+        <div class="card">
+          <div class="icon">⭐</div>
+          <h3>Mais visibilidade</h3>
+          <p>Boas duplas podem ganhar destaque no ranking, serem reconhecidas no servidor e chamar atenção de outros players.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🏆</div>
+          <h3>Competição organizada</h3>
+          <p>Partidas com ranking, vagas limitadas e foco competitivo para deixar a experiência mais séria e divertida.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="ranking">
+      <div class="section-title">
+        <h2>Ranking da Liga</h2>
+        <p>Modelo de ranking oficial da Alt League. Você pode editar os nomes e pontos quando a liga começar.</p>
+      </div>
+
+      <div class="ranking-box">
+        <div class="rank-row header">
+          <span>Posição</span>
+          <span>Dupla</span>
+          <span>Pontos</span>
+          <span>Status</span>
+        </div>
+        <div class="rank-row">
+          <span class="pos">#1</span>
+          <span class="team">Aguardando dupla</span>
+          <span>0 pts</span>
+          <span>Em breve</span>
+        </div>
+        <div class="rank-row">
+          <span class="pos">#2</span>
+          <span class="team">Aguardando dupla</span>
+          <span>0 pts</span>
+          <span>Em breve</span>
+        </div>
+        <div class="rank-row">
+          <span class="pos">#3</span>
+          <span class="team">Aguardando dupla</span>
+          <span>0 pts</span>
+          <span>Em breve</span>
+        </div>
+        <div class="rank-row">
+          <span class="pos">#4</span>
+          <span class="team">Aguardando dupla</span>
+          <span>0 pts</span>
+          <span>Em breve</span>
+        </div>
+        <div class="rank-row">
+          <span class="pos">#5</span>
+          <span class="team">Aguardando dupla</span>
+          <span>0 pts</span>
+          <span>Em breve</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="cta-box">
+        <h2>Garanta sua vaga antes de lotar.</h2>
+        <p>
+          São apenas 50 vagas. Monte sua dupla, faça a inscrição por R$5 e venha disputar
+          posição no ranking da Alt League.
+        </p>
+        <a class="btn btn-primary" href="https://discord.gg/altshop" target="_blank">Quero participar pelo Discord</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 Alt League — Volleyball Legends Roblox. Site criado para divulgação da liga.
+  </footer>
+
+  <script>
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach((card) => {
+      card.addEventListener('mousemove', (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        card.style.setProperty('--x', `${x}px`);
+        card.style.setProperty('--y', `${y}px`);
+      });
+    });
+  </script>
+</body>
+</html>
